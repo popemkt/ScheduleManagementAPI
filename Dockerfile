@@ -13,6 +13,4 @@ RUN dotnet publish ColdSchedules.sln -c Release -o /src/publish
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 COPY --from=publish /src/publish .
-# ENTRYPOINT ["dotnet", "ColdSchedulesAPI.dll"]
-# heroku uses the following
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet ColdSchedulesAPI.dll
