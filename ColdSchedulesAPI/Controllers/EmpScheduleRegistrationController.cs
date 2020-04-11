@@ -63,7 +63,5 @@ namespace ColdSchedulesAPI.Controllers
                 return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
-
-       
     }
 }

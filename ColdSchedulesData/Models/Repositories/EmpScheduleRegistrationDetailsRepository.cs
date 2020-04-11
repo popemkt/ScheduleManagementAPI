@@ -19,7 +19,7 @@ namespace ColdSchedulesData.Models.Repositories
     public class EmpScheduleRegistrationDetailsRepository : BaseRepository<EmpScheduleRegistrationDetails>, IEmpScheduleRegistrationDetailsRepository
     {
 
-        public EmpScheduleRegistrationDetailsRepository(ScheduleManagementContext context): base(context)
+        public EmpScheduleRegistrationDetailsRepository(ScheduleManagementContext context) : base(context)
         {
 
         }

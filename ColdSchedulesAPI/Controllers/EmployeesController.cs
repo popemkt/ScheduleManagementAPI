@@ -26,7 +26,7 @@ namespace ColdSchedulesAPI.Controllers
 
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
@@ -42,7 +42,7 @@ namespace ColdSchedulesAPI.Controllers
 
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
@@ -58,7 +58,7 @@ namespace ColdSchedulesAPI.Controllers
 
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
@@ -74,7 +74,7 @@ namespace ColdSchedulesAPI.Controllers
 
                 return Ok(result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }

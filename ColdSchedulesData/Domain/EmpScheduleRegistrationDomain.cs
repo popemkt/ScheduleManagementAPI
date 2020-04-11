@@ -57,7 +57,7 @@ namespace ColdSchedulesData.Domain
                 return new ResponseViewModel { Success = false, Message = e.Message };
             }
         }
-       
+
         public ResponseViewModel GetScheduleForWeek(int empID, DateTime start, DateTime end)
         {
             try

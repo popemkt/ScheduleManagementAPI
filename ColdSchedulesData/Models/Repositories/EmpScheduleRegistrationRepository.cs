@@ -27,7 +27,7 @@ namespace ColdSchedulesData.Models.Repositories
 
         public EmpScheduleRegistration GetScheduleForWeek(int empID, DateTime start, DateTime end)
         {
-            return FirstOrDefault(q=> q.EmpId == empID &&  q.FromDate == start && q.ToDate == end);
+            return FirstOrDefault(q => q.EmpId == empID && q.FromDate == start && q.ToDate == end);
         }
 
         public void UpdateScheduleForWeek(EmpScheduleRegistration empSR)
