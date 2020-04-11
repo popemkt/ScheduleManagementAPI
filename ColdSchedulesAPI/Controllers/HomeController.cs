@@ -21,7 +21,14 @@ namespace ColdSchedulesAPI.Controllers
 
                 var result = authDomain.Login(model.Username, model.Password);
 
-                return Ok(new ResponseViewModel { Data = result, Success = true });
+                if(result != null)
+                {
+                    return Ok(new ResponseViewModel { Data = result, Success = true });
+                }
+                else
+                {
+                    return Ok(new ResponseViewModel { Message = "Invalid username or password", Success = false });
+                }
             }
             catch(Exception e)
             {
