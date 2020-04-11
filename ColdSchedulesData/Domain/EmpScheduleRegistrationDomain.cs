@@ -5,19 +5,19 @@ using ColdSchedulesData.Models.Repositories;
 using ColdSchedulesData.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ColdSchedulesData.Domain
 {
     public interface IEmpScheduleRegistrationDomain
     {
-        ResponseViewModel GetScheduleForWeek(int id);
+        ResponseViewModel GetScheduleForWeek(int id, DateTime start, DateTime end);
 
-        ResponseViewModel CreateScheduleForWeek(List<EmpScheduleRegistrationViewModel> modelList);
+        ResponseViewModel CreateScheduleForWeek(EmpScheduleRegistrationViewModel model);
 
-        ResponseViewModel UpdateScheduleForWeek(List<EmpScheduleRegistrationViewModel> modelList);
+        ResponseViewModel UpdateScheduleForWeek(EmpScheduleRegistrationViewModel model);
 
-        ResponseViewModel DeleteScheduleForWeek(List<EmpScheduleRegistrationViewModel> modelList);
     }
     public class EmpScheduleRegistrationDomain : BaseDomain, IEmpScheduleRegistrationDomain
     {
@@ -28,72 +28,98 @@ namespace ColdSchedulesData.Domain
             this._mapper = mapper;
         }
 
-        public ResponseViewModel CreateScheduleForWeek(List<EmpScheduleRegistrationViewModel> modelList)
+        public ResponseViewModel CreateScheduleForWeek(EmpScheduleRegistrationViewModel model)
         {
             try
             {
                 var empSRRepo = _uow.GetService<IEmpScheduleRegistrationRepository>();
-                var list = _mapper.Map<List<EmpScheduleRegistration>>(modelList);
+                var empSRDRepo = _uow.GetService<IEmpScheduleRegistrationDetailsRepository>();
+                var empSR = _mapper.Map<EmpScheduleRegistration>(model);
+                var empSRDs = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
-                empSRRepo.CreateScheduleForWeek(list);
-                empSRRepo.Save();
+                empSR.DateCreated = DateTime.Now;
+                empSRRepo.CreateScheduleForWeek(empSR);
+                _uow.Save();
 
-                return new ResponseViewModel {Success = true, Message="Create Successfull" };
+                foreach (var item in empSRDs)
+                {
+                    item.Active = true;
+                    item.EmpScheduleRegistrationId = empSR.Id;
+                }
+
+                empSRDRepo.CreateEmpSRDs(empSRDs);
+                _uow.Save();
+
+                return new ResponseViewModel { Success = true, Message = "Create Successfull" };
             }
             catch (Exception e)
             {
-                return new ResponseViewModel {Success = false, Message="Create Failed" };
+                return new ResponseViewModel { Success = false, Message = e.Message };
             }
         }
-
-        public ResponseViewModel DeleteScheduleForWeek(List<EmpScheduleRegistrationViewModel> modelList)
+       
+        public ResponseViewModel GetScheduleForWeek(int empID, DateTime start, DateTime end)
         {
             try
             {
                 var empSRRepo = _uow.GetService<IEmpScheduleRegistrationRepository>();
-                var list = _mapper.Map<List<EmpScheduleRegistration>>(modelList);
+                var empSRDRepo = _uow.GetService<IEmpScheduleRegistrationDetailsRepository>();
 
-                empSRRepo.DeactiveScheduleForWeek(list);
-                empSRRepo.Save();
+                var empSR = empSRRepo.GetScheduleForWeek(empID, start, end);
+                var result = _mapper.Map<EmpScheduleRegistrationViewModel>(empSR);
+                result.Details = _mapper.Map<List<EmpScheduleRegistrationDetailsViewModel>>(empSR.EmpScheduleRegistrationDetails.ToList());
 
-                return new ResponseViewModel { Success = true, Message = "Delete Successfull" };
-            }
-            catch (Exception e)
-            {
-                return new ResponseViewModel { Success = false, Message = "Delete Failed" };
-            }
-        }
-
-        public ResponseViewModel GetScheduleForWeek(int id)
-        {
-            try
-            {
-                var empSRRepo = _uow.GetService<IEmpScheduleRegistrationRepository>();
-                var result = empSRRepo.GetScheduleForWeek(id);
+                result.EmpName = empSR.Emp.Fullname;
+                result.EmpUsername = empSR.Emp.Username;
 
                 return new ResponseViewModel { Data = result, Success = true };
             }
             catch (Exception e)
             {
-                return new ResponseViewModel {Success = false, Message="Cannot get" };
+                return new ResponseViewModel { Success = false, Message = e.Message };
             }
         }
 
-        public ResponseViewModel UpdateScheduleForWeek(List<EmpScheduleRegistrationViewModel> modelList)
+        public ResponseViewModel UpdateScheduleForWeek(EmpScheduleRegistrationViewModel model)
         {
             try
             {
                 var empSRRepo = _uow.GetService<IEmpScheduleRegistrationRepository>();
-                var list = _mapper.Map<List<EmpScheduleRegistration>>(modelList);
+                var empSRDRepo = _uow.GetService<IEmpScheduleRegistrationDetailsRepository>();
 
-                empSRRepo.UpdateScheduleForWeek(list);
-                empSRRepo.Save();
+                var empSR = _mapper.Map<EmpScheduleRegistration>(model);
+                var oldDetails = empSRRepo.GetScheduleForWeek(model.EmpId, model.FromDate, model.ToDate).EmpScheduleRegistrationDetails;
+                var newDetails = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
+
+                empSR.DateUpdated = DateTime.Now;
+
+                foreach (var item in oldDetails)
+                {
+                    if (!newDetails.Contains(item))
+                    {
+                        empSRDRepo.DeactiveEmpSRD(item);
+                    }
+                    else
+                    {
+                        empSRDRepo.Activate(item);
+                    }
+                }
+
+                foreach (var item in newDetails)
+                {
+                    if (empSRDRepo.FirstOrDefaultActive(q => q.Id == item.Id) == null)
+                    {
+                        empSRDRepo.CreateEmpSRD(item);
+                    }
+                }
+
+                _uow.Save();
 
                 return new ResponseViewModel { Success = true, Message = "Update Successfull" };
             }
             catch (Exception e)
             {
-                return new ResponseViewModel { Success = false, Message = "Update Failed" };
+                return new ResponseViewModel { Success = false, Message = e.Message };
             }
         }
     }

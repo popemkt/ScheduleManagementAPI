@@ -7,11 +7,13 @@ namespace ColdSchedulesData.ViewModels
     public class ArrangedScheduleViewModel
     {
         public int Id { get; set; }
-        public DateTime? Date { get; set; }
-        public int? HourSlot { get; set; }
-        public int? SpecialtyId { get; set; }
-        public int? EmpId { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
+        public List<ArrangedScheduleDetailsViewModel> Details { get; set; }
 
         //extend
+
     }
 }

@@ -16,22 +16,23 @@ namespace ColdSchedulesAPI.Controllers
     public class EmpScheduleRegistrationController : BaseController
     {
         [HttpGet("")]
-        public IActionResult GetScheduleForWeek(int id)
+        public IActionResult GetScheduleForWeek(int empID, DateTime start, DateTime end)
         {
             try
             {
                 var empSRDomain = Service<IEmpScheduleRegistrationDomain>();
-                
-                return Ok(empSRDomain.GetScheduleForWeek(id));
+                var result = empSRDomain.GetScheduleForWeek(empID, start, end);
+
+                return Ok(result);
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
 
         [HttpPost("")]
-        public IActionResult CreateScheduleForWeek([FromBody]List<EmpScheduleRegistrationViewModel> model)
+        public IActionResult CreateScheduleForWeek([FromBody]EmpScheduleRegistrationViewModel model)
         {
             try
             {
@@ -43,36 +44,26 @@ namespace ColdSchedulesAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
 
         [HttpPut("")]
-        public IActionResult UpdateScheduleForWeek([FromBody]List<EmpScheduleRegistrationViewModel> model)
+        public IActionResult UpdateScheduleForWeek([FromBody]EmpScheduleRegistrationViewModel model)
         {
             try
             {
-                //var empDomain = dependency injection IDomain
-                return Ok();
+                var empSRDomain = Service<IEmpScheduleRegistrationDomain>();
+                var result = empSRDomain.UpdateScheduleForWeek(model);
+
+                return Ok(result);
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
 
-        [HttpDelete("")]
-        public IActionResult DeleteScheduleForWeek([FromBody]List<EmpScheduleRegistrationViewModel> model)
-        {
-            try
-            {
-                //var empDomain = dependency injection IDomain
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500);
-            }
-        }
+       
     }
 }

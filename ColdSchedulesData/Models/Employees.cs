@@ -7,7 +7,7 @@ namespace ColdSchedulesData.Models
     {
         public Employees()
         {
-            ArrangedSchedule = new HashSet<ArrangedSchedule>();
+            ArrangedScheduleDetails = new HashSet<ArrangedScheduleDetails>();
             EmpScheduleRegistration = new HashSet<EmpScheduleRegistration>();
             EmpSpecialty = new HashSet<EmpSpecialty>();
         }
@@ -16,11 +16,11 @@ namespace ColdSchedulesData.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Fullname { get; set; }
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public bool Active { get; set; }
 
         public virtual Roles Role { get; set; }
-        public virtual ICollection<ArrangedSchedule> ArrangedSchedule { get; set; }
+        public virtual ICollection<ArrangedScheduleDetails> ArrangedScheduleDetails { get; set; }
         public virtual ICollection<EmpScheduleRegistration> EmpScheduleRegistration { get; set; }
         public virtual ICollection<EmpSpecialty> EmpSpecialty { get; set; }
     }

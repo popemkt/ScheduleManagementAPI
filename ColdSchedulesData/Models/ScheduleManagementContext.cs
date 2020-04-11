@@ -16,11 +16,14 @@ namespace ColdSchedulesData.Models
         }
 
         public virtual DbSet<ArrangedSchedule> ArrangedSchedule { get; set; }
+        public virtual DbSet<ArrangedScheduleDetails> ArrangedScheduleDetails { get; set; }
         public virtual DbSet<EmpScheduleRegistration> EmpScheduleRegistration { get; set; }
+        public virtual DbSet<EmpScheduleRegistrationDetails> EmpScheduleRegistrationDetails { get; set; }
         public virtual DbSet<EmpSpecialty> EmpSpecialty { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<ScheduleTemplate> ScheduleTemplate { get; set; }
+        public virtual DbSet<ScheduleTemplateDetails> ScheduleTemplateDetails { get; set; }
         public virtual DbSet<Specialty> Specialty { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,7 +31,7 @@ namespace ColdSchedulesData.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=schedulemanagement.c9nigxriip7d.us-east-2.rds.amazonaws.com,1433;Database=ScheduleManagement;User ID=admin;Password=Hoangpro123;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=ScheduleManagement;User ID=sa;Password=K@zenosakura2786101999;");
             }
         }
 
@@ -38,20 +41,43 @@ namespace ColdSchedulesData.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+
+                entity.Property(e => e.FromDate).HasColumnType("date");
+
+                entity.Property(e => e.ToDate).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<ArrangedScheduleDetails>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ArrangedScheduleId).HasColumnName("ArrangedScheduleID");
+
                 entity.Property(e => e.Date).HasColumnType("date");
 
                 entity.Property(e => e.EmpId).HasColumnName("EmpID");
 
                 entity.Property(e => e.SpecialtyId).HasColumnName("SpecialtyID");
 
+                entity.HasOne(d => d.ArrangedSchedule)
+                    .WithMany(p => p.ArrangedScheduleDetails)
+                    .HasForeignKey(d => d.ArrangedScheduleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ArrangedScheduleDetails_ArrangedSchedule");
+
                 entity.HasOne(d => d.Emp)
-                    .WithMany(p => p.ArrangedSchedule)
+                    .WithMany(p => p.ArrangedScheduleDetails)
                     .HasForeignKey(d => d.EmpId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ArrangedSchedule_Employees");
 
                 entity.HasOne(d => d.Specialty)
-                    .WithMany(p => p.ArrangedSchedule)
+                    .WithMany(p => p.ArrangedScheduleDetails)
                     .HasForeignKey(d => d.SpecialtyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ArrangedSchedule_Specialty");
             });
 
@@ -59,21 +85,36 @@ namespace ColdSchedulesData.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Date).HasColumnType("date");
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
 
                 entity.Property(e => e.EmpId).HasColumnName("EmpID");
 
-                entity.Property(e => e.SpecialtyId).HasColumnName("SpecialtyID");
+                entity.Property(e => e.FromDate).HasColumnType("date");
+
+                entity.Property(e => e.ToDate).HasColumnType("date");
 
                 entity.HasOne(d => d.Emp)
                     .WithMany(p => p.EmpScheduleRegistration)
                     .HasForeignKey(d => d.EmpId)
-                    .HasConstraintName("FK_EmpSchedule_Employees");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmpScheduleRegistration_Employees");
+            });
 
-                entity.HasOne(d => d.Specialty)
-                    .WithMany(p => p.EmpScheduleRegistration)
-                    .HasForeignKey(d => d.SpecialtyId)
-                    .HasConstraintName("FK_EmpScheduleRegistration_Specialty");
+            modelBuilder.Entity<EmpScheduleRegistrationDetails>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.EmpScheduleRegistrationId).HasColumnName("EmpScheduleRegistrationID");
+
+                entity.HasOne(d => d.EmpScheduleRegistration)
+                    .WithMany(p => p.EmpScheduleRegistrationDetails)
+                    .HasForeignKey(d => d.EmpScheduleRegistrationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmpScheduleRegistrationDetails_EmpScheduleRegistration");
             });
 
             modelBuilder.Entity<EmpSpecialty>(entity =>
@@ -87,11 +128,13 @@ namespace ColdSchedulesData.Models
                 entity.HasOne(d => d.Emp)
                     .WithMany(p => p.EmpSpecialty)
                     .HasForeignKey(d => d.EmpId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmpSpecialty_Employees");
 
                 entity.HasOne(d => d.Specialty)
                     .WithMany(p => p.EmpSpecialty)
                     .HasForeignKey(d => d.SpecialtyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmpSpecialty_Specialty");
             });
 
@@ -103,22 +146,26 @@ namespace ColdSchedulesData.Models
                 entity.Property(e => e.EmpId).HasColumnName("EmpID");
 
                 entity.Property(e => e.Fullname)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.Username)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Accounts_Roles");
             });
 
@@ -129,21 +176,46 @@ namespace ColdSchedulesData.Models
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
             modelBuilder.Entity<ScheduleTemplate>(entity =>
             {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+
+                entity.Property(e => e.FromDate).HasColumnType("date");
+
+                entity.Property(e => e.ToDate).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<ScheduleTemplateDetails>(entity =>
+            {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
+                entity.Property(e => e.ScheduleTemplateId).HasColumnName("ScheduleTemplateID");
+
                 entity.Property(e => e.SpecialtyId).HasColumnName("SpecialtyID");
 
+                entity.HasOne(d => d.ScheduleTemplate)
+                    .WithMany(p => p.ScheduleTemplateDetails)
+                    .HasForeignKey(d => d.ScheduleTemplateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ScheduleTemplateDetails_ScheduleTemplate");
+
                 entity.HasOne(d => d.Specialty)
-                    .WithMany(p => p.ScheduleTemplate)
+                    .WithMany(p => p.ScheduleTemplateDetails)
                     .HasForeignKey(d => d.SpecialtyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ScheduleTemplate_Specialty");
             });
 
@@ -152,6 +224,7 @@ namespace ColdSchedulesData.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });

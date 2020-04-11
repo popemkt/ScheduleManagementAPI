@@ -7,13 +7,11 @@ namespace ColdSchedulesData.Models.Repositories
 {
     public interface IEmpScheduleRegistrationRepository : IBaseRepository<EmpScheduleRegistration>
     {
-        void CreateScheduleForWeek(List<EmpScheduleRegistration> list);
+        void CreateScheduleForWeek(EmpScheduleRegistration empSR);
 
-        void UpdateScheduleForWeek(List<EmpScheduleRegistration> list);
+        void UpdateScheduleForWeek(EmpScheduleRegistration empSR);
 
-        void DeactiveScheduleForWeek(List<EmpScheduleRegistration> list);
-
-        IQueryable<EmpScheduleRegistration> GetScheduleForWeek(int id);
+        EmpScheduleRegistration GetScheduleForWeek(int empID, DateTime start, DateTime end);
     }
 
     public class EmpScheduleRegistrationRepository : BaseRepository<EmpScheduleRegistration>, IEmpScheduleRegistrationRepository
@@ -22,30 +20,19 @@ namespace ColdSchedulesData.Models.Repositories
         {
         }
 
-        public void CreateScheduleForWeek(List<EmpScheduleRegistration> list)
+        public void CreateScheduleForWeek(EmpScheduleRegistration empSR)
         {
-            AddRange(list);
+            Add(empSR);
         }
 
-        public void DeactiveScheduleForWeek(List<EmpScheduleRegistration> list)
+        public EmpScheduleRegistration GetScheduleForWeek(int empID, DateTime start, DateTime end)
         {
-            foreach(var item in list)
-            {
-                Edit(item);
-            }
+            return FirstOrDefault(q=> q.EmpId == empID &&  q.FromDate == start && q.ToDate == end);
         }
 
-        public IQueryable<EmpScheduleRegistration> GetScheduleForWeek(int id)
+        public void UpdateScheduleForWeek(EmpScheduleRegistration empSR)
         {
-            return GetActive(q=> q.EmpId == id);
-        }
-
-        public void UpdateScheduleForWeek(List<EmpScheduleRegistration> list)
-        {
-            foreach (var item in list)
-            {
-                Deactivate(item);
-            }
+            Edit(empSR);
         }
     }
 }
