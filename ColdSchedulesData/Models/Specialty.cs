@@ -7,18 +7,16 @@ namespace ColdSchedulesData.Models
     {
         public Specialty()
         {
-            ArrangedSchedule = new HashSet<ArrangedSchedule>();
-            EmpScheduleRegistration = new HashSet<EmpScheduleRegistration>();
+            ArrangedScheduleDetails = new HashSet<ArrangedScheduleDetails>();
             EmpSpecialty = new HashSet<EmpSpecialty>();
-            ScheduleTemplate = new HashSet<ScheduleTemplate>();
+            ScheduleTemplateDetails = new HashSet<ScheduleTemplateDetails>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<ArrangedSchedule> ArrangedSchedule { get; set; }
-        public virtual ICollection<EmpScheduleRegistration> EmpScheduleRegistration { get; set; }
+        public virtual ICollection<ArrangedScheduleDetails> ArrangedScheduleDetails { get; set; }
         public virtual ICollection<EmpSpecialty> EmpSpecialty { get; set; }
-        public virtual ICollection<ScheduleTemplate> ScheduleTemplate { get; set; }
+        public virtual ICollection<ScheduleTemplateDetails> ScheduleTemplateDetails { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ColdSchedulesData.Models.Repositories
 
         void UpdateEmp(Employees emp);
 
-        void Deactive(Employees emp);
+        void DeactiveEmp(Employees emp);
 
         Employees GetEmployee(int id);
 
@@ -37,7 +37,7 @@ namespace ColdSchedulesData.Models.Repositories
             Edit(emp);
         }
 
-        public void Deactive(Employees emp)
+        public void DeactiveEmp(Employees emp)
         {
             Deactivate(emp);
         }

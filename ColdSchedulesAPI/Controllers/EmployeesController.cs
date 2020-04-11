@@ -22,14 +22,13 @@ namespace ColdSchedulesAPI.Controllers
             try
             {
                 var empDomain = Service<IEmployeesDomain>();
+                var result = empDomain.GetEmployees();
 
-                
-
-                return Ok(empDomain.GetEmployees());
+                return Ok(result);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                return StatusCode(500, e.Message);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
 
@@ -39,14 +38,13 @@ namespace ColdSchedulesAPI.Controllers
             try
             {
                 var empDomain = Service<IEmployeesDomain>();
+                var result = empDomain.CreateEmployees(model);
 
-                empDomain.CreateEmployees(model);
-
-                return Ok();
+                return Ok(result);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
 
@@ -55,12 +53,14 @@ namespace ColdSchedulesAPI.Controllers
         {
             try
             {
-                //var empDomain = dependency injection IDomain
-                return Ok();
+                var empDomain = Service<IEmployeesDomain>();
+                var result = empDomain.UpdateEmployees(model);
+
+                return Ok(result);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
 
@@ -69,12 +69,14 @@ namespace ColdSchedulesAPI.Controllers
         {
             try
             {
-                //var empDomain = dependency injection IDomain
-                return Ok();
+                var empDomain = Service<IEmployeesDomain>();
+                var result = empDomain.DeleteEmployees(model);
+
+                return Ok(result);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
             }
         }
     }

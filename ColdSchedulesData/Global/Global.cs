@@ -47,6 +47,12 @@ namespace ColdSchedulesData.Global
 			{
 				cfg.CreateMap<Employees, EmployeesViewModel>().ReverseMap();
 				cfg.CreateMap<EmpScheduleRegistration, EmpScheduleRegistrationViewModel>().ReverseMap();
+				cfg.CreateMap<EmpScheduleRegistrationDetails, EmpScheduleRegistrationDetailsViewModel>().ReverseMap();
+				cfg.CreateMap<ArrangedSchedule, ArrangedScheduleViewModel>().ReverseMap();
+				cfg.CreateMap<ArrangedScheduleDetails, ArrangedScheduleDetailsViewModel>().ReverseMap();
+				cfg.CreateMap<ScheduleTemplate, ScheduleTemplateViewModel>().ReverseMap();
+				cfg.CreateMap<ScheduleTemplateDetails, ScheduleTemplateDetailsViewModel>().ReverseMap();
+				cfg.CreateMap<EmpSpecialty, EmpSpecialtyViewModel>().ReverseMap();
 			});
 			ConfigureAutomapper();
 			services.AddSingleton(Mapper);

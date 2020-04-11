@@ -11,5 +11,9 @@ namespace ColdSchedulesData.ViewModels
         public int? SpecialtyId { get; set; }
 
         //extend
+
+        public string EmpName { get; set; }
+
+        public string SpecialtyName { get; set; }
     }
 }

@@ -16,9 +16,9 @@ namespace ColdSchedulesData.Domain
 
         ResponseViewModel CreateEmployees(EmployeesViewModel model);
 
-        ResponseViewModel UpdateEmployees();
+        ResponseViewModel UpdateEmployees(EmployeesViewModel model);
 
-        ResponseViewModel DeleteEmployees();
+        ResponseViewModel DeleteEmployees(EmployeesViewModel model);
     }
 
     public class EmployeesDomain : BaseDomain, IEmployeesDomain
@@ -32,34 +32,72 @@ namespace ColdSchedulesData.Domain
 
         public ResponseViewModel CreateEmployees(EmployeesViewModel model)
         {
-            var empRepo = _uow.GetService<IEmployeesRepository>();
-            var emp = _mapper.Map<Employees>(model);
+            try
+            {
+                var empRepo = _uow.GetService<IEmployeesRepository>();
+                model.Active = true;
+                var emp = _mapper.Map<Employees>(model);
 
-            //empRepo.CreateEmployees(emp);
+                empRepo.CreateEmp(emp);
+                _uow.Save();
 
-            return new ResponseViewModel();
+                return new ResponseViewModel { Message = "Create sucessfull", Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ResponseViewModel { Message = e.Message, Success = false };
+            }
         }
 
-        public ResponseViewModel DeleteEmployees()
+        public ResponseViewModel DeleteEmployees(EmployeesViewModel model)
         {
-            //var repo = Dependency Injection IRepo
-            return new ResponseViewModel();
+            try
+            {
+                var empRepo = _uow.GetService<IEmployeesRepository>();
+                var emp = _mapper.Map<Employees>(model);
+
+                empRepo.DeactiveEmp(emp);
+                _uow.Save();
+
+                return new ResponseViewModel { Message = "Delete sucessfull", Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ResponseViewModel { Message = e.Message, Success = false };
+            }
         }
 
         public ResponseViewModel GetEmployees()
         {
-            var empRepo = _uow.GetService<IEmployeesRepository>();
+            try
+            {
+                var empRepo = _uow.GetService<IEmployeesRepository>();
+                var result = _mapper.Map<List<EmployeesViewModel>>(empRepo.GetEmployees().ToList());
 
-            var result = _mapper.Map<List<EmployeesViewModel>>(empRepo.GetEmployees().ToList());
-            return new ResponseViewModel { Data = result, Success = true};
+                return new ResponseViewModel { Data = result, Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ResponseViewModel { Message = e.Message, Success = false };
+            }
         }
 
-        public ResponseViewModel UpdateEmployees()
+        public ResponseViewModel UpdateEmployees(EmployeesViewModel model)
         {
-            //var repo = Dependency Injection IRepo
-            return new ResponseViewModel();
-        }
+            try
+            {
+                var empRepo = _uow.GetService<IEmployeesRepository>();
+                var emp = _mapper.Map<Employees>(model);
 
-      
+                empRepo.UpdateEmp(emp);
+                _uow.Save();
+
+                return new ResponseViewModel { Message = "Update sucessfull", Success = true };
+            }
+            catch (Exception e)
+            {
+                return new ResponseViewModel { Message = e.Message, Success = false };
+            }
+        }
     }
 }

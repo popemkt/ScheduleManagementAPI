@@ -5,13 +5,17 @@ namespace ColdSchedulesData.Models
 {
     public partial class ArrangedSchedule
     {
-        public int Id { get; set; }
-        public DateTime? Date { get; set; }
-        public int? HourSlot { get; set; }
-        public int? SpecialtyId { get; set; }
-        public int? EmpId { get; set; }
+        public ArrangedSchedule()
+        {
+            ArrangedScheduleDetails = new HashSet<ArrangedScheduleDetails>();
+        }
 
-        public virtual Employees Emp { get; set; }
-        public virtual Specialty Specialty { get; set; }
+        public int Id { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
+
+        public virtual ICollection<ArrangedScheduleDetails> ArrangedScheduleDetails { get; set; }
     }
 }

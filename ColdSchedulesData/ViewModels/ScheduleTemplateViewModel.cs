@@ -4,14 +4,14 @@ using System.Text;
 
 namespace ColdSchedulesData.ViewModels
 {
-    public class ScheduleTemplateViewModel
+    public partial class ScheduleTemplateViewModel
     {
         public int Id { get; set; }
-        public DateTime? Date { get; set; }
-        public int? HourSlot { get; set; }
-        public int? NoOfEmp { get; set; }
-        public int? SpecialtyId { get; set; }
-
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
+        public List<ScheduleTemplateDetailsViewModel> Details { get; set; }
         //extend
     }
 }
