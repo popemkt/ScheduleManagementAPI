@@ -85,6 +85,7 @@ namespace ColdSchedulesAPI
             services.AddDbContext<ScheduleManagementContext>(options =>
             {
                 options.UseLazyLoadingProxies();
+                
             });
            
             Global.Configure(services);

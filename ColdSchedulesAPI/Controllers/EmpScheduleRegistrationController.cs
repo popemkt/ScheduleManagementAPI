@@ -38,9 +38,9 @@ namespace ColdSchedulesAPI.Controllers
             {
                 var empSRDomain = Service<IEmpScheduleRegistrationDomain>();
 
-                empSRDomain.CreateScheduleForWeek(model);
+                var result = empSRDomain.CreateScheduleForWeek(model);
 
-                return Ok();
+                return Ok(result);
             }
             catch (Exception e)
             {

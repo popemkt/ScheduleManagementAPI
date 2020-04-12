@@ -18,7 +18,7 @@ namespace ColdSchedulesData.Domain
 
         ResponseViewModel UpdateEmployees(EmployeesViewModel model);
 
-        ResponseViewModel DeleteEmployees(EmployeesViewModel model);
+        ResponseViewModel DeleteEmployees(int id);
     }
 
     public class EmployeesDomain : BaseDomain, IEmployeesDomain
@@ -37,7 +37,7 @@ namespace ColdSchedulesData.Domain
                 var empRepo = _uow.GetService<IEmployeesRepository>();
                 model.Active = true;
                 var emp = _mapper.Map<Employees>(model);
-
+                emp.Role = null;
                 empRepo.CreateEmp(emp);
                 _uow.Save();
 
@@ -49,13 +49,13 @@ namespace ColdSchedulesData.Domain
             }
         }
 
-        public ResponseViewModel DeleteEmployees(EmployeesViewModel model)
+        public ResponseViewModel DeleteEmployees(int id)
         {
             try
             {
                 var empRepo = _uow.GetService<IEmployeesRepository>();
-                var emp = _mapper.Map<Employees>(model);
-
+                var emp = empRepo.GetEmployee(id);
+                
                 empRepo.DeactiveEmp(emp);
                 _uow.Save();
 
@@ -88,7 +88,6 @@ namespace ColdSchedulesData.Domain
             {
                 var empRepo = _uow.GetService<IEmployeesRepository>();
                 var emp = _mapper.Map<Employees>(model);
-
                 empRepo.UpdateEmp(emp);
                 _uow.Save();
 

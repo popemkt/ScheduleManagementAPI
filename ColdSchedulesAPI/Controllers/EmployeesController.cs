@@ -64,13 +64,13 @@ namespace ColdSchedulesAPI.Controllers
             }
         }
 
-        [HttpDelete("")]
-        public IActionResult DeleteEmployee([FromBody]EmployeesViewModel model)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEmployee(int id)
         {
             try
             {
                 var empDomain = Service<IEmployeesDomain>();
-                var result = empDomain.DeleteEmployees(model);
+                var result = empDomain.DeleteEmployees(id);
 
                 return Ok(result);
             }

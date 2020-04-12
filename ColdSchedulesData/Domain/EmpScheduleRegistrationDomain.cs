@@ -32,11 +32,13 @@ namespace ColdSchedulesData.Domain
         {
             try
             {
-                var empSRRepo = _uow.GetService<IEmpScheduleRegistrationRepository>();
                 var empSRDRepo = _uow.GetService<IEmpScheduleRegistrationDetailsRepository>();
+                var empSRRepo = _uow.GetService<IEmpScheduleRegistrationRepository>();
+
                 var empSR = _mapper.Map<EmpScheduleRegistration>(model);
                 var empSRDs = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
+                empSR.Emp = null;
                 empSR.DateCreated = DateTime.Now;
                 empSRRepo.CreateScheduleForWeek(empSR);
                 _uow.Save();
@@ -66,6 +68,12 @@ namespace ColdSchedulesData.Domain
                 var empSRDRepo = _uow.GetService<IEmpScheduleRegistrationDetailsRepository>();
 
                 var empSR = empSRRepo.GetScheduleForWeek(empID, start, end);
+
+                if (empSR == null)
+                {
+                    return new ResponseViewModel { Success = false, Message = "You haven't register for this week" };
+                }
+
                 var result = _mapper.Map<EmpScheduleRegistrationViewModel>(empSR);
                 result.Details = _mapper.Map<List<EmpScheduleRegistrationDetailsViewModel>>(empSR.EmpScheduleRegistrationDetails.ToList());
 
@@ -88,30 +96,39 @@ namespace ColdSchedulesData.Domain
                 var empSRDRepo = _uow.GetService<IEmpScheduleRegistrationDetailsRepository>();
 
                 var empSR = _mapper.Map<EmpScheduleRegistration>(model);
-                var oldDetails = empSRRepo.GetScheduleForWeek(model.EmpId, model.FromDate, model.ToDate).EmpScheduleRegistrationDetails;
+                empSR.Emp = null;
+                var oldDetails = empSRDRepo.Get(q => q.EmpScheduleRegistrationId == model.Id).ToList();
                 var newDetails = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
                 empSR.DateUpdated = DateTime.Now;
 
-                foreach (var item in oldDetails)
+                foreach (var item in newDetails)
                 {
-                    if (!newDetails.Contains(item))
+                    if (item.Id != 0)
                     {
-                        empSRDRepo.DeactiveEmpSRD(item);
+                        foreach (var detail in oldDetails)
+                        {
+                            if (item.Id == detail.Id)
+                            {
+                                empSRDRepo.Activate(detail);
+                                oldDetails.Remove(detail);
+                                break;
+                            }
+                            else
+                            {
+                                empSRDRepo.Deactivate(detail);
+                            }
+                        }
                     }
                     else
                     {
-                        empSRDRepo.Activate(item);
-                    }
-                }
-
-                foreach (var item in newDetails)
-                {
-                    if (empSRDRepo.FirstOrDefaultActive(q => q.Id == item.Id) == null)
-                    {
+                        item.EmpScheduleRegistrationId = oldDetails[0].EmpScheduleRegistrationId;
+                        item.EmpScheduleRegistration = null;
                         empSRDRepo.CreateEmpSRD(item);
                     }
                 }
+
+                empSRRepo.Edit(empSR);
 
                 _uow.Save();
 

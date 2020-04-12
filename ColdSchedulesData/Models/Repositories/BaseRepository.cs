@@ -153,7 +153,7 @@ namespace ColdSchedulesData.Models.Repositories
 
         public virtual void Edit(TEntity entity)
         {
-            this.dbContext.Entry<TEntity>(entity);
+            this.dbContext.Update<TEntity>(entity);
         }
 
         public virtual void Activate(TEntity entity)

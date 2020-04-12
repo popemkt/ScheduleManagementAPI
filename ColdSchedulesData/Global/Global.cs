@@ -38,7 +38,8 @@ namespace ColdSchedulesData.Global
 				.AddScoped<IUnitOfWork, UnitOfWork>()
 				.AddScoped<DbContext, ScheduleManagementContext>()
 				.AddScoped<IEmployeesRepository,EmployeesRepository>()
-				.AddScoped<IEmpScheduleRegistrationRepository, EmpScheduleRegistrationRepository>();
+				.AddScoped<IEmpScheduleRegistrationRepository, EmpScheduleRegistrationRepository>()
+				.AddScoped<IEmpScheduleRegistrationDetailsRepository, EmpScheduleRegistrationDetailsRepository>();
 		}
 
 		public static void Configure(IServiceCollection services)
