@@ -17,6 +17,8 @@ namespace ColdSchedulesData.Domain
     public interface IAuthorizationDomain
     {
         EmployeesViewModel Login(string username, string password);
+
+        EmployeesViewModel LoginFirebase(string uid);
     }
 
     public class AuthorizationDomain : BaseDomain, IAuthorizationDomain
@@ -31,13 +33,55 @@ namespace ColdSchedulesData.Domain
             _appSettings = appSettings.Value;
             _mapper = mapper;
         }
+
+        public EmployeesViewModel LoginFirebase(string uid)
+        {
+            var empRepo = _uow.GetService<IEmployeesRepository>();
+            var emp = empRepo.GetEmployeeByUID(uid);
+
+            var empModel = new EmployeesViewModel();
+            // return null if user not found
+            if (emp == null)
+            {
+                var empCreate = new Employees
+                {
+                    FirebaseUid = uid,
+                    Active = true,
+                    RoleId = 3
+                };
+                empRepo.CreateEmp(empCreate);
+                _uow.Save();
+
+                empModel = _mapper.Map<EmployeesViewModel>(empCreate);
+            }
+            else
+            {
+                empModel = _mapper.Map<EmployeesViewModel>(emp);
+            }
+            // authentication successful so generate jwt token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, empModel.EmpId.ToString()),
+                    new Claim(ClaimTypes.Role, empModel.RoleName)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            empModel.Token = tokenHandler.WriteToken(token);
+
+            return empModel;
+        }
+
         public EmployeesViewModel Login(string username, string password)
         {
             var empRepo = _uow.GetService<IEmployeesRepository>();
             var emp = empRepo.GetActive(q => q.Username == username && q.Password == password).FirstOrDefault();
             var empModel = _mapper.Map<EmployeesViewModel>(emp);
-
-            var ems = new Employees();
 
             // return null if user not found
             if (emp == null)
@@ -61,5 +105,7 @@ namespace ColdSchedulesData.Domain
 
             return empModel;
         }
+
+       
     }
 }

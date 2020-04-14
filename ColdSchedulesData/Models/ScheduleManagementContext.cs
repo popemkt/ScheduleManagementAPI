@@ -145,20 +145,22 @@ namespace ColdSchedulesData.Models
 
                 entity.Property(e => e.EmpId).HasColumnName("EmpID");
 
+                entity.Property(e => e.FirebaseUid)
+                    .HasColumnName("FirebaseUID")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Fullname)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.Username)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

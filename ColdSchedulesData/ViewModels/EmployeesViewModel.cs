@@ -13,6 +13,8 @@ namespace ColdSchedulesData.ViewModels
         public string Fullname { get; set; }
         public int RoleId { get; set; }
         public bool Active { get; set; }
+        public string FirebaseUid { get; set; }
+
 
         //extend
 

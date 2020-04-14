@@ -17,6 +17,8 @@ namespace ColdSchedulesData.Models.Repositories
         Employees GetEmployee(int id);
 
         IQueryable<Employees> GetEmployees();
+
+        Employees GetEmployeeByUID(string uid);
         
     }
 
@@ -50,6 +52,11 @@ namespace ColdSchedulesData.Models.Repositories
         public IQueryable<Employees> GetEmployees()
         {
             return GetActive();
+        }
+
+        public Employees GetEmployeeByUID(string uid)
+        {
+            return FirstOrDefault(q =>q.FirebaseUid == uid);
         }
     }
 }

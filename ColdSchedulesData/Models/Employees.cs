@@ -18,6 +18,7 @@ namespace ColdSchedulesData.Models
         public string Fullname { get; set; }
         public int RoleId { get; set; }
         public bool Active { get; set; }
+        public string FirebaseUid { get; set; }
 
         public virtual Roles Role { get; set; }
         public virtual ICollection<ArrangedScheduleDetails> ArrangedScheduleDetails { get; set; }

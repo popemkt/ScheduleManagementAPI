@@ -3,6 +3,8 @@ using ColdSchedulesData.Domain;
 using ColdSchedulesData.Global;
 using ColdSchedulesData.Models;
 using ColdSchedulesData.Models.Repositories;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -87,7 +89,16 @@ namespace ColdSchedulesAPI
                 options.UseLazyLoadingProxies();
                 
             });
-           
+
+            //firebase
+
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile("Secret/schedulemanagement-980b4-firebase-adminsdk-too6r-b5725d4270.json"),
+            });
+
+
+
             Global.Configure(services);
         }
 
