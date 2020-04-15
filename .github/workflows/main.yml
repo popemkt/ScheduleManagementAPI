@@ -21,7 +21,7 @@ jobs:
         cd ./
         dotnet tool install --global dotnet-sonarscanner
         dotnet sonarscanner begin /k:"popemkt_ScheduleManagementAPI" /d:"sonar.login=${SONARCLOUD_TOKEN}" /o:"popemkt" /d:"sonar.host.url=https://sonarcloud.io"
-        dotnet publish ColdSchedules.sln -c Release -o /src/publish
+        dotnet publish ColdSchedules.sln -c Release -o ./src/publish
         dotnet sonarscanner end /d:"sonar.login=${SONARCLOUD_TOKEN}"
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
         heroku container:push web -a $APP_NAME
