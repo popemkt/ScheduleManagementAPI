@@ -82,7 +82,7 @@ namespace ColdSchedulesData.Domain
                 }
 
                 var result = _mapper.Map<EmpScheduleRegistrationViewModel>(empSR);
-                result.Details = _mapper.Map<List<EmpScheduleRegistrationDetailsViewModel>>(empSR.EmpScheduleRegistrationDetails.Select(q=> q.Active == true).ToList());
+                result.Details = _mapper.Map<List<EmpScheduleRegistrationDetailsViewModel>>(empSR.EmpScheduleRegistrationDetails.Where(q=> q.Active == true).ToList());
 
                 result.EmpName = empSR.Emp.Fullname;
                 result.EmpUsername = empSR.Emp.Username;
