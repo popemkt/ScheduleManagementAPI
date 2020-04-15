@@ -98,18 +98,39 @@ namespace ColdSchedulesData.Domain
                 template.DateUpdated = DateTime.Now;
                 templateRepo.UpdateTemplate(template);
 
-                var newdetails = _mapper.Map<List<ScheduleTemplateDetails>>(model.Details);
-                foreach (var item in newdetails)
+                var oldDetails = templateDRepo.GetTemplateDetais(model.Id).ToList();
+                var newDetails = _mapper.Map<List<ScheduleTemplateDetails>>(model.Details);
+                foreach (var item in newDetails)
                 {
-                    if (item.Id == 0)
+                    if (item.Id != 0)
                     {
-                        templateDRepo.CreateTemplateDetail(item);
+                        foreach (var detail in oldDetails)
+                        {
+                            if (item.Id == detail.Id)
+                            {
+                                templateDRepo.ActiveTemplateDetail(detail);
+                                oldDetails.Remove(detail);
+                                break;
+                            }
+                            else
+                            {
+                                templateDRepo.DeactiveTemplateeDetail(detail);
+                            }
+                        }
                     }
                     else
                     {
-                        templateDRepo.Edit(item);
+                        item.ScheduleTemplateId = model.Id;
+                        item.ScheduleTemplate = null;
+                        templateDRepo.CreateTemplateDetail(item);
                     }
                 }
+
+                foreach (var item in oldDetails)
+                {
+                    templateDRepo.DeactiveTemplateeDetail(item);
+                }
+
 
                 _uow.Save();
 

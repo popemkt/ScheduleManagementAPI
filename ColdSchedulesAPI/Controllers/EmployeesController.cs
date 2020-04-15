@@ -32,6 +32,22 @@ namespace ColdSchedulesAPI.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetEmployee(int id)
+        {
+            try
+            {
+                var empDomain = Service<IEmployeesDomain>();
+                var result = empDomain.GetEmployee(id);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new ResponseViewModel { Message = e.Message, Success = false });
+            }
+        }
+
         [HttpPost("")]
         [Authorize(Roles = Role.Admin)]
         public IActionResult CreateEmployee([FromBody]EmployeesViewModel model)

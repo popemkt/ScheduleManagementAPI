@@ -43,6 +43,8 @@ namespace ColdSchedulesData.Global
 				.AddScoped<IScheduleTemplateDetailsRepository, ScheduleTemplateDetailsRepository>()
 				.AddScoped<IArrangedScheduleRepository, ArrangedScheduleRepository>()
 				.AddScoped<IArrangedScheduleDetailsRepository, ArrangedScheduleDetailsRepository>()
+				.AddScoped<ISpecialtyRepository, SpecialtyRepository>()
+				.AddScoped<IEmpSpecialtyRepository, EmpSpecialtyRepository>()
 				.AddScoped<IEmpScheduleRegistrationDetailsRepository, EmpScheduleRegistrationDetailsRepository>();
 		}
 

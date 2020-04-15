@@ -41,7 +41,7 @@ namespace ColdSchedulesData.Models
     {
     }
 
-    public partial class ScheduleTemplateDetails : IEntity
+    public partial class ScheduleTemplateDetails : IEntity, IActive
     {
     }
     

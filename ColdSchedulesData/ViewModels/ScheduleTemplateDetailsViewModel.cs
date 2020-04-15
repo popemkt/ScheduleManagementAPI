@@ -12,6 +12,7 @@ namespace ColdSchedulesData.ViewModels
         public int NoOfEmp { get; set; }
         public int SpecialtyId { get; set; }
         public int ScheduleTemplateId { get; set; }
+        public bool Active { get; set; }
 
         //extend
 

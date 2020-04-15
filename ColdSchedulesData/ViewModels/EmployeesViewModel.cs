@@ -22,6 +22,6 @@ namespace ColdSchedulesData.ViewModels
 
         public string RoleName { get; set; }
 
-        public string SpecialtyName { get; set; }
+        public List<SpecialtyViewModel> Specialty { get; set; }
     }
 }

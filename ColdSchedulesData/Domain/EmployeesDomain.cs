@@ -19,6 +19,8 @@ namespace ColdSchedulesData.Domain
         ResponseViewModel UpdateEmployees(EmployeesViewModel model);
 
         ResponseViewModel DeleteEmployees(int id);
+
+        ResponseViewModel GetEmployee(int id);
     }
 
     public class EmployeesDomain : BaseDomain, IEmployeesDomain
@@ -67,12 +69,50 @@ namespace ColdSchedulesData.Domain
             }
         }
 
+        public ResponseViewModel GetEmployee(int id)
+        {
+            try
+            {
+                var empRepo = _uow.GetService<IEmployeesRepository>();
+
+                var emp = empRepo.GetEmployee(id);
+                var result = _mapper.Map<EmployeesViewModel>(emp);
+
+                var empSpec = emp.EmpSpecialty;
+
+                result.Specialty = new List<SpecialtyViewModel>();
+
+                foreach(var item in empSpec)
+                {
+                    result.Specialty.Add(_mapper.Map<SpecialtyViewModel>(item.Specialty));
+                }
+
+                return new ResponseViewModel { Data = result, Success = true };
+            }
+            catch(Exception e)
+            {
+                return new ResponseViewModel { Message = e.Message, Success = false };
+            }
+        }
+
         public ResponseViewModel GetEmployees()
         {
             try
             {
                 var empRepo = _uow.GetService<IEmployeesRepository>();
-                var result = _mapper.Map<List<EmployeesViewModel>>(empRepo.GetEmployees().ToList());
+                var list = empRepo.GetEmployees().ToList();
+                var result = _mapper.Map<List<EmployeesViewModel>>(list);
+
+                for(var i = 0; i< list.Count; i++)
+                {
+                    result[i].Specialty = new List<SpecialtyViewModel>();
+
+                    foreach(var item in list[i].EmpSpecialty)
+                    {
+                        result[i].Specialty.Add(_mapper.Map<SpecialtyViewModel>(item.Specialty));
+                    }
+
+                }
 
                 return new ResponseViewModel { Data = result, Success = true };
             }
@@ -87,7 +127,17 @@ namespace ColdSchedulesData.Domain
             try
             {
                 var empRepo = _uow.GetService<IEmployeesRepository>();
+                var specRepo = _uow.GetService<IEmpSpecialtyRepository>();
                 var emp = _mapper.Map<Employees>(model);
+
+                foreach(var item in model.Specialty)
+                {
+                    if(specRepo.GetEMpSpecialty(model.EmpId, item.Id) == null)
+                    {
+                        specRepo.CreateeEmpSpecialty(new EmpSpecialty { EmpId = model.EmpId, SpecialtyId = item.Id });
+                    }
+                }
+
                 empRepo.UpdateEmp(emp);
                 _uow.Save();
 

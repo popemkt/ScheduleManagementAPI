@@ -11,6 +11,7 @@ namespace ColdSchedulesData.Models
         public int SpecialtyId { get; set; }
         public int EmpId { get; set; }
         public int ArrangedScheduleId { get; set; }
+        public bool Active { get; set; }
 
         public virtual ArrangedSchedule ArrangedSchedule { get; set; }
         public virtual Employees Emp { get; set; }
