@@ -7,26 +7,23 @@ on:
     - release/*
 
 jobs:
-  build_and_analyze:
+  build_analyze_deploy:
     runs-on: ubuntu-16.04
     steps:
     - uses: actions/checkout@v1
-    - name: Build and deploy the Docker image
+    - name: Build, analyze and deploy the Docker image
       env: 
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         APP_NAME: ${{ 'testapiasp' }}
-      run: |
-        cd ./
-        docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-        heroku container:push web -a $APP_NAME
-        heroku container:release web -a $APP_NAME
-    - name: Run sonar
-      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
       run: |
         cd ./
         dotnet tool install --global dotnet-sonarscanner
         dotnet sonarscanner begin /k:"popemkt_ScheduleManagementAPI" /d:"sonar.login=${SONARCLOUD_TOKEN}" /o:"popemkt" /d:"sonar.host.url=https://sonarcloud.io"
-        dotnet build ColdSchedules.sln
+        dotnet publish ColdSchedules.sln -c Release -o /src/publish
         dotnet sonarscanner end /d:"sonar.login=${SONARCLOUD_TOKEN}"
+        docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+        heroku container:push web -a $APP_NAME
+        heroku container:release web -a $APP_NAME
+
