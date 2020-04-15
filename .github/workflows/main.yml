@@ -7,7 +7,7 @@ on:
     - release/*
 
 jobs:
-  build_api:
+  build_and_analyze:
     runs-on: ubuntu-16.04
     steps:
     - uses: actions/checkout@v1
@@ -20,14 +20,13 @@ jobs:
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
         heroku container:push web -a $APP_NAME
         heroku container:release web -a $APP_NAME
-        pwd
     - name: Run sonar
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
       run: |
         cd ./
-        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip
-        unzip sonar-scanner-cli-4.2.0.1873-linux.zip
-        chmod +x ./sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner
-        ./sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.organization=popemkt -Dsonar.projectKey=popemkt_ScheduleManagementAPI -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
+        dotnet tool install --global dotnet-sonarscanner
+        dotnet sonarscanner begin /k:"popemkt_ScheduleManagementAPI" /d:"sonar.login=${SONARCLOUD_TOKEN}" /o:"popemkt" /d:"sonar.host.url=https://sonarcloud.io"
+        dotnet build ColdSchedules.sln
+        dotnet sonarscanner end /d:"sonar.login=${SONARCLOUD_TOKEN}"
