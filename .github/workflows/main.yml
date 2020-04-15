@@ -26,4 +26,4 @@ jobs:
         cd ./
         wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip
         unzip sonar-scanner-cli-4.2.0.1873-linux.zip
-        ./sonar-scanner-cli-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.organization=popemkt -Dsonar.projectKey=popemkt_ScheduleManagementAPI -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=a31a50a1360f6c40ef391847b0073b0ad207d1e0
+        ./sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner -Dsonar.organization=popemkt -Dsonar.projectKey=popemkt_ScheduleManagementAPI -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=a31a50a1360f6c40ef391847b0073b0ad207d1e0
