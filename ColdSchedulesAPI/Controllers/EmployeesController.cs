@@ -33,6 +33,7 @@ namespace ColdSchedulesAPI.Controllers
         }
 
         [HttpPost("")]
+        [Authorize(Roles = Role.Admin)]
         public IActionResult CreateEmployee([FromBody]EmployeesViewModel model)
         {
             try

@@ -9,7 +9,7 @@ namespace ColdSchedulesData.Domain
     {
         void Noti(Message message);
     }
-    public class NotiDomain
+    public class NotiDomain : INotiDomain
     {
 
         public void Noti(Message message)

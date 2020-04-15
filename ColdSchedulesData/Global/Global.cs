@@ -66,6 +66,7 @@ namespace ColdSchedulesData.Global
 			//extra
 			services.AddScoped<IEmployeesDomain, EmployeesDomain>()
 				.AddScoped<IAuthorizationDomain, AuthorizationDomain>()
+				.AddScoped<INotiDomain, NotiDomain>()
 				.AddScoped<IScheduleTemplateDomain, ScheduleTemplateDomain>()
 				.AddScoped<IEmpScheduleRegistrationDomain, EmpScheduleRegistrationDomain>();
 
