@@ -11,6 +11,8 @@ namespace ColdSchedulesData.Global
         T GetService<T>();
 
 		void Save();
+
+		
     }
 
     public partial class UnitOfWork : IUnitOfWork
@@ -33,6 +35,11 @@ namespace ColdSchedulesData.Global
 		public void Save()
 		{
 			context.SaveChanges();
+		}
+
+		public void BeginTransation()
+		{
+			
 		}
 	}
 }
