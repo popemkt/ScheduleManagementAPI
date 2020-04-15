@@ -10,7 +10,7 @@ namespace ColdSchedulesData.Domain
     {
 
     }
-    public class ArrangedScheduleDomain : BaseDomain
+    public class ArrangedScheduleDomain : BaseDomain, IArrangedScheduleDomain
     {
         private readonly IMapper _mapper;
         public ArrangedScheduleDomain(IMapper mapper, IUnitOfWork uow): base(uow)

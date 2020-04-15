@@ -10,7 +10,7 @@ namespace ColdSchedulesData.Domain
     {
 
     }
-    public class SpecialtyDomain : BaseDomain
+    public class SpecialtyDomain : BaseDomain, ISpecialtyDomain
     {
         private readonly IMapper _mapper;
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using ColdSchedulesData.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ColdSchedulesData.Global
@@ -12,8 +14,9 @@ namespace ColdSchedulesData.Global
 
 		void Save();
 
-		
-    }
+		IDbContextTransaction BeginTransation();
+
+	}
 
     public partial class UnitOfWork : IUnitOfWork
     {
@@ -37,9 +40,10 @@ namespace ColdSchedulesData.Global
 			context.SaveChanges();
 		}
 
-		public void BeginTransation()
+		public IDbContextTransaction BeginTransation()
 		{
-			
+			return context.Database.BeginTransaction();
 		}
+
 	}
 }

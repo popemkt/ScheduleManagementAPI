@@ -38,19 +38,26 @@ namespace ColdSchedulesData.Domain
                 var empSR = _mapper.Map<EmpScheduleRegistration>(model);
                 var empSRDs = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
-                empSR.Emp = null;
-                empSR.DateCreated = DateTime.Now;
-                empSRRepo.CreateScheduleForWeek(empSR);
-                _uow.Save();
-
-                foreach (var item in empSRDs)
+                using( var trans = _uow.BeginTransation())
                 {
-                    item.Active = true;
-                    item.EmpScheduleRegistrationId = empSR.Id;
+                    empSR.Emp = null;
+                    empSR.DateCreated = DateTime.Now;
+                    empSRRepo.CreateScheduleForWeek(empSR);
+                    _uow.Save();
+
+                    foreach (var item in empSRDs)
+                    {
+                        item.Active = true;
+                        item.EmpScheduleRegistrationId = empSR.Id;
+                    }
+
+                    empSRDRepo.CreateEmpSRDs(empSRDs);
+                    _uow.Save();
+
+                    trans.Commit();
                 }
 
-                empSRDRepo.CreateEmpSRDs(empSRDs);
-                _uow.Save();
+               
 
                 return new ResponseViewModel { Success = true, Message = "Create Successfull" };
             }
@@ -100,7 +107,6 @@ namespace ColdSchedulesData.Domain
                 var oldDetails = empSRDRepo.GetEmpSRDs(model.Id).ToList();
                 var newDetails = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
-                empSR.DateCreated = empSRRepo.GetScheduleForWeekByID(model.Id).DateCreated;
                 empSR.DateUpdated = DateTime.Now;
 
                 foreach (var item in newDetails)
