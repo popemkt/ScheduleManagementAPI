@@ -122,7 +122,7 @@ namespace ColdSchedulesData.Domain
                     }
                     else
                     {
-                        item.EmpScheduleRegistrationId = oldDetails[0].EmpScheduleRegistrationId;
+                        item.EmpScheduleRegistrationId = model.Id;
                         item.EmpScheduleRegistration = null;
                         empSRDRepo.CreateEmpSRD(item);
                     }
