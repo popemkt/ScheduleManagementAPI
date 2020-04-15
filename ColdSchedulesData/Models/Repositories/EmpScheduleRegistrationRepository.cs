@@ -12,6 +12,8 @@ namespace ColdSchedulesData.Models.Repositories
         void UpdateScheduleForWeek(EmpScheduleRegistration empSR);
 
         EmpScheduleRegistration GetScheduleForWeek(int empID, DateTime start, DateTime end);
+
+        EmpScheduleRegistration GetScheduleForWeekByID(int id);
     }
 
     public class EmpScheduleRegistrationRepository : BaseRepository<EmpScheduleRegistration>, IEmpScheduleRegistrationRepository
@@ -28,6 +30,11 @@ namespace ColdSchedulesData.Models.Repositories
         public EmpScheduleRegistration GetScheduleForWeek(int empID, DateTime start, DateTime end)
         {
             return FirstOrDefault(q => q.EmpId == empID && q.FromDate == start && q.ToDate == end);
+        }
+
+        public EmpScheduleRegistration GetScheduleForWeekByID(int id)
+        {
+            return FirstOrDefault(q => q.Id == id);
         }
 
         public void UpdateScheduleForWeek(EmpScheduleRegistration empSR)

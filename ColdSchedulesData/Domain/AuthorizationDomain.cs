@@ -74,6 +74,19 @@ namespace ColdSchedulesData.Domain
             var token = tokenHandler.CreateToken(tokenDescriptor);
             empModel.Token = tokenHandler.WriteToken(token);
 
+            var notiDomain = _uow.GetService<INotiDomain>();
+
+            var mess = new Dictionary<string, string>();
+
+            mess.Add("title", "Login");
+            mess.Add("message", "Login successfull");
+
+            notiDomain.Noti(new FirebaseAdmin.Messaging.Message
+            {
+                Topic = "test",
+                Data = mess
+            });
+
             return empModel;
         }
 

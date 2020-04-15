@@ -100,6 +100,7 @@ namespace ColdSchedulesData.Domain
                 var oldDetails = empSRDRepo.GetEmpSRDs(model.Id).ToList();
                 var newDetails = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
+                empSR.DateCreated = empSRRepo.GetScheduleForWeekByID(model.Id).DateCreated;
                 empSR.DateUpdated = DateTime.Now;
 
                 foreach (var item in newDetails)
@@ -127,6 +128,12 @@ namespace ColdSchedulesData.Domain
                         empSRDRepo.CreateEmpSRD(item);
                     }
                 }
+
+                foreach(var item in oldDetails)
+                {
+                    empSRDRepo.DeactiveEmpSRD(item);
+                }
+
 
                 empSRRepo.Edit(empSR);
 

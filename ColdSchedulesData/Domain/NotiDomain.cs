@@ -7,7 +7,7 @@ namespace ColdSchedulesData.Domain
 {
     public interface INotiDomain
     {
-
+        void Noti(Message message);
     }
     public class NotiDomain
     {
