@@ -7,6 +7,8 @@ namespace ColdSchedulesData.Models.Repositories
 {
     public interface IEmpScheduleRegistrationDetailsRepository : IBaseRepository<EmpScheduleRegistrationDetails>
     {
+        void ActiveEmpSRD(EmpScheduleRegistrationDetails detail);
+
         void CreateEmpSRD(EmpScheduleRegistrationDetails detail);
 
         void CreateEmpSRDs(List<EmpScheduleRegistrationDetails> details);
@@ -22,6 +24,11 @@ namespace ColdSchedulesData.Models.Repositories
         public EmpScheduleRegistrationDetailsRepository(ScheduleManagementContext context) : base(context)
         {
 
+        }
+
+        public void ActiveEmpSRD(EmpScheduleRegistrationDetails detail)
+        {
+            Activate(detail);
         }
 
         public void CreateEmpSRD(EmpScheduleRegistrationDetails detail)

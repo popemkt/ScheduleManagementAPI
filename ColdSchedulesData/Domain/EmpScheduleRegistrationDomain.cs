@@ -12,7 +12,7 @@ namespace ColdSchedulesData.Domain
 {
     public interface IEmpScheduleRegistrationDomain
     {
-        ResponseViewModel GetScheduleForWeek(int id, DateTime start, DateTime end);
+        ResponseViewModel GetScheduleForWeek(int empID, DateTime start, DateTime end);
 
         ResponseViewModel CreateScheduleForWeek(EmpScheduleRegistrationViewModel model);
 
@@ -97,7 +97,7 @@ namespace ColdSchedulesData.Domain
 
                 var empSR = _mapper.Map<EmpScheduleRegistration>(model);
                 empSR.Emp = null;
-                var oldDetails = empSRDRepo.Get(q => q.EmpScheduleRegistrationId == model.Id).ToList();
+                var oldDetails = empSRDRepo.GetEmpSRDs(model.Id).ToList();
                 var newDetails = _mapper.Map<List<EmpScheduleRegistrationDetails>>(model.Details);
 
                 empSR.DateUpdated = DateTime.Now;
@@ -110,13 +110,13 @@ namespace ColdSchedulesData.Domain
                         {
                             if (item.Id == detail.Id)
                             {
-                                empSRDRepo.Activate(detail);
+                                empSRDRepo.ActiveEmpSRD(detail);
                                 oldDetails.Remove(detail);
                                 break;
                             }
                             else
                             {
-                                empSRDRepo.Deactivate(detail);
+                                empSRDRepo.DeactiveEmpSRD(detail);
                             }
                         }
                     }

@@ -39,6 +39,8 @@ namespace ColdSchedulesData.Global
 				.AddScoped<DbContext, ScheduleManagementContext>()
 				.AddScoped<IEmployeesRepository,EmployeesRepository>()
 				.AddScoped<IEmpScheduleRegistrationRepository, EmpScheduleRegistrationRepository>()
+				.AddScoped<IScheduleTemplateRepository, ScheduleTemplateRepository>()
+				.AddScoped<IScheduleTemplateDetailsRepository, ScheduleTemplateDetailsRepository>()
 				.AddScoped<IEmpScheduleRegistrationDetailsRepository, EmpScheduleRegistrationDetailsRepository>();
 		}
 
@@ -54,6 +56,8 @@ namespace ColdSchedulesData.Global
 				cfg.CreateMap<ScheduleTemplate, ScheduleTemplateViewModel>().ReverseMap();
 				cfg.CreateMap<ScheduleTemplateDetails, ScheduleTemplateDetailsViewModel>().ReverseMap();
 				cfg.CreateMap<EmpSpecialty, EmpSpecialtyViewModel>().ReverseMap();
+				cfg.CreateMap<ScheduleTemplateDetails, ScheduleTemplateDetailsViewModel>().ReverseMap();
+				cfg.CreateMap<ScheduleTemplate, ScheduleTemplateViewModel>().ReverseMap();
 			});
 			ConfigureAutomapper();
 			services.AddSingleton(Mapper);
@@ -62,6 +66,7 @@ namespace ColdSchedulesData.Global
 			//extra
 			services.AddScoped<IEmployeesDomain, EmployeesDomain>()
 				.AddScoped<IAuthorizationDomain, AuthorizationDomain>()
+				.AddScoped<IScheduleTemplateDomain, ScheduleTemplateDomain>()
 				.AddScoped<IEmpScheduleRegistrationDomain, EmpScheduleRegistrationDomain>();
 
 		}
