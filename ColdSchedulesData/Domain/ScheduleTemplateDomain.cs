@@ -35,6 +35,7 @@ namespace ColdSchedulesData.Domain
 
                 var template = _mapper.Map<ScheduleTemplate>(model);
                 template.DateCreated = DateTime.Now;
+                template.DateUpdated = DateTime.Now;
                 templateRepo.CreateTemplate(template);
                 _uow.Save();
 
