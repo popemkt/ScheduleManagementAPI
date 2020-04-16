@@ -42,6 +42,7 @@ namespace ColdSchedulesData.Domain
                 {
                     empSR.Emp = null;
                     empSR.DateCreated = DateTime.Now;
+                    empSR.DateUpdated = DateTime.Now;
                     empSRRepo.CreateScheduleForWeek(empSR);
                     _uow.Save();
 
