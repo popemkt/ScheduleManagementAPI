@@ -16,7 +16,7 @@ namespace ColdSchedulesAPI.Controllers
     public class ScheduleTemplateController : BaseController
     {
         [HttpGet("")]
-        public IActionResult GetScheduleForWeek(int empID, DateTime start, DateTime end)
+        public IActionResult GetScheduleForWeek(DateTime start, DateTime end)
         {
             try
             {

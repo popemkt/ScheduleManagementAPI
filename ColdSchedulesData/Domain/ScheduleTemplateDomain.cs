@@ -105,6 +105,7 @@ namespace ColdSchedulesData.Domain
                 {
                     if (item.Id != 0)
                     {
+
                         foreach (var detail in oldDetails)
                         {
                             if (item.Id == detail.Id)
@@ -123,6 +124,7 @@ namespace ColdSchedulesData.Domain
                     {
                         item.ScheduleTemplateId = model.Id;
                         item.ScheduleTemplate = null;
+                        item.Specialty = null;
                         templateDRepo.CreateTemplateDetail(item);
                     }
                 }

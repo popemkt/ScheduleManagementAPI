@@ -185,9 +185,7 @@ namespace ColdSchedulesData.Models
 
             modelBuilder.Entity<ScheduleTemplate>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
