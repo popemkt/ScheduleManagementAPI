@@ -31,7 +31,7 @@ namespace ColdSchedulesData.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=schedulemanagement.c9nigxriip7d.us-east-2.rds.amazonaws.com,1433;Database=ScheduleManagement;User ID=admin;Password=Hoangpro123;");
+                optionsBuilder.UseSqlServer("Server=schedulemanagement.c9nigxriip7d.us-east-2.rds.amazonaws.com,1433;Database=ScheduleManagement;User ID=admin;Password=Hoangpro123;MultipleActiveResultSets=true");
             }
         }
 
