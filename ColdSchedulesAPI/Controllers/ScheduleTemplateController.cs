@@ -32,7 +32,7 @@ namespace ColdSchedulesAPI.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateScheduleForWeek([FromBody]EmpScheduleRegistrationViewModel model)
+        public IActionResult CreateScheduleForWeek([FromBody]ScheduleTemplateViewModel model)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace ColdSchedulesAPI.Controllers
         }
 
         [HttpPut("")]
-        public IActionResult UpdateScheduleForWeek([FromBody]EmpScheduleRegistrationViewModel model)
+        public IActionResult UpdateScheduleForWeek([FromBody]ScheduleTemplateViewModel model)
         {
             try
             {

@@ -14,9 +14,9 @@ namespace ColdSchedulesData.Domain
     {
         ResponseViewModel GetTemplateForWeek(DateTime start, DateTime end);
 
-        ResponseViewModel CreateTemplateForWeek(EmpScheduleRegistrationViewModel model);
+        ResponseViewModel CreateTemplateForWeek(ScheduleTemplateViewModel model);
 
-        ResponseViewModel UpdateTempalteForWeek(EmpScheduleRegistrationViewModel model);
+        ResponseViewModel UpdateTempalteForWeek(ScheduleTemplateViewModel model);
     }
     public class ScheduleTemplateDomain : BaseDomain, IScheduleTemplateDomain
     {
@@ -26,7 +26,7 @@ namespace ColdSchedulesData.Domain
             this._mapper = mapper;
         }
 
-        public ResponseViewModel CreateTemplateForWeek(EmpScheduleRegistrationViewModel model)
+        public ResponseViewModel CreateTemplateForWeek(ScheduleTemplateViewModel model)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace ColdSchedulesData.Domain
             }
         }
 
-        public ResponseViewModel UpdateTempalteForWeek(EmpScheduleRegistrationViewModel model)
+        public ResponseViewModel UpdateTempalteForWeek(ScheduleTemplateViewModel model)
         {
             try
             {

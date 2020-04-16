@@ -54,6 +54,7 @@ namespace ColdSchedulesData.Global
 			{
 				cfg.CreateMap<Employees, EmployeesViewModel>().ReverseMap();
 				cfg.CreateMap<ArrangedScheduleDetails, EmpScheduleRegistrationViewModel>().ReverseMap();
+				cfg.CreateMap<EmpScheduleRegistration, EmpScheduleRegistrationViewModel>().ReverseMap();
 				cfg.CreateMap<EmpScheduleRegistrationDetails, EmpScheduleRegistrationDetailsViewModel>().ReverseMap();
 				cfg.CreateMap<ArrangedSchedule, ArrangedScheduleViewModel>().ReverseMap();
 				cfg.CreateMap<ArrangedScheduleDetails, ArrangedScheduleDetailsViewModel>().ReverseMap();
